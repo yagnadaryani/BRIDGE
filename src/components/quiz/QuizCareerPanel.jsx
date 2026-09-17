@@ -15,56 +15,125 @@ import {
   TrendingUp,
   Cpu,
   Cloud,
-  Code2
+  Code2,
+  Target,
+  Layers,
+  Award,
+  Wrench,
+  Check
 } from 'lucide-react';
 
 export const QuizCareerPanel = () => {
   const { addXP, gamification, setActiveTab, t } = useApp();
 
-  const [activeTab, setActiveTabState] = useState('career');
-  const [careerStep, setCareerStep] = useState(0);
-  const [careerAnswers, setCareerAnswers] = useState({});
-  const [careerResult, setCareerResult] = useState(null);
+  const [activeTab, setActiveTabState] = useState('career_readiness'); // 'career_readiness' | 'quiz' | 'survey'
+  const [selectedTargetRole, setSelectedTargetRole] = useState('cloud_sre');
 
-  const [quizTopic, setQuizTopic] = useState('os');
+  // Quiz state
   const [quizStarted, setQuizStarted] = useState(false);
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [userSelectedOpt, setUserSelectedOpt] = useState(null);
   const [quizScore, setQuizScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
 
-  const careerQuestions = [
-    {
-      id: 'q1',
-      question: 'Which core technical domain excites you the most?',
-      options: [
-        { label: 'Designing scalable multi-region cloud infrastructure & high traffic servers ☁️', score: 'cloud' },
-        { label: 'Building hardware microcontrollers, breadboard logic gates & physical chips ⚡', score: 'embedded' },
-        { label: 'Writing low-level operating system kernel schedulers & memory management ⚙️', score: 'systems' },
-        { label: 'Optimizing algorithmic data structures (Trees, Graphs, Sorting algorithms) 💻', score: 'dsa' }
+  // Target Roles Data
+  const targetRolesData = {
+    cloud_sre: {
+      title: 'Cloud Systems Architect & DevOps SRE ☁️',
+      salary: '$135,000 – $185,000 / yr',
+      desc: 'High demand path building cloud topology, autoscaling rules, NGINX load balancing, and high-availability clusters.',
+      overallReadiness: 84,
+      skillsGap: [
+        { name: 'Python Systems Scripting', current: 85, required: 90, gap: 5, action: 'Complete Python automation mission in Chatbot' },
+        { name: 'Cloud Infrastructure & ALB', current: 90, required: 95, gap: 5, action: 'Master Cloud Topology in Cloud Lab' },
+        { name: 'Linux OS Kernels & Scheduling', current: 75, required: 90, gap: 15, action: 'Solve Round Robin Quantum in OS Lab' },
+        { name: 'Kubernetes & Container Orchestration', current: 60, required: 85, gap: 25, action: 'Complete Autoscaling Surge Lab Mission' }
+      ],
+      roadmap: [
+        { stage: 'Stage 1: Foundation', desc: 'Master OS CPU scheduling, process queues, and memory management.' },
+        { stage: 'Stage 2: Core Skills', desc: 'Configure NGINX ALB, SSL termination, and Redis caching layers.' },
+        { stage: 'Stage 3: Projects', desc: 'Build multi-region cloud topology handling 50k req/s traffic spikes.' },
+        { stage: 'Stage 4: Advanced', desc: 'Implement automated failover & zero-downtime database replication.' },
+        { stage: 'Stage 5: Career Ready', desc: 'SRE Mock interviews & infrastructure code review.' }
+      ],
+      recommendedProject: {
+        title: 'Distributed Multi-Region Load-Balanced Microservice',
+        problem: 'Simulate handling 50,000 req/s traffic spikes under a $250/mo cloud budget constraint with 99.99% uptime.',
+        skillsRequired: ['NGINX ALB', 'Redis Cache', 'Auto-Scaling', 'Docker'],
+        difficulty: 'Advanced Engineering',
+        portfolioValue: '9.5 / 10',
+        linkedTab: 'cloud'
+      },
+      nextActions: [
+        { title: '1. Resolve OS Round Robin Quantum Gap', desc: 'Your OS scheduling skill is at 75%. Practice Round Robin Gantt calculation in OS Lab.', tab: 'os' },
+        { title: '2. Complete Cloud Load Balancing Mission', desc: 'Simulate 50k req/s traffic spike without exceeding $250 budget limit.', tab: 'cloud' }
       ]
     },
-    {
-      id: 'q2',
-      question: 'What type of engineering problem do you enjoy solving?',
-      options: [
-        { label: 'Preventing server outages during a 50,000 req/s traffic spike under budget', score: 'cloud' },
-        { label: 'Debugging voltage signals, flip-flops, and 8-bit LED output ports', score: 'embedded' },
-        { label: 'Eliminating CPU starvation and calculating process waiting times', score: 'systems' },
-        { label: 'Reducing algorithm time complexity from O(N^2) to O(N log N)', score: 'dsa' }
+    aiml_engineer: {
+      title: 'AI / Machine Learning Systems Engineer 🧠',
+      salary: '$145,000 – $200,000 / yr',
+      desc: 'Top-tier career building neural network inference engines, model optimization, and GenAI pipeline architecture.',
+      overallReadiness: 76,
+      skillsGap: [
+        { name: 'Python & Vectorized Math', current: 80, required: 95, gap: 15, action: 'Practice array pointer trace in DSA Lab' },
+        { name: 'Data Structures & Trees (BST)', current: 70, required: 90, gap: 20, action: 'Fix tree recursion bug in DSA Lab' },
+        { name: 'PyTorch / TensorFlow Frameworks', current: 55, required: 85, gap: 30, action: 'Complete AI Model Optimization Quiz' },
+        { name: 'GPU Acceleration & CUDA Memory', current: 50, required: 80, gap: 30, action: 'Study 8085 opcode registers in Micro Lab' }
+      ],
+      roadmap: [
+        { stage: 'Stage 1: Foundation', desc: 'Linear algebra, matrix operations, and Big-O algorithm analysis.' },
+        { stage: 'Stage 2: Core Skills', desc: 'Supervised/unsupervised ML algorithms and loss function optimization.' },
+        { stage: 'Stage 3: Projects', desc: 'Train LLM fine-tuned model for domain RAG question answering.' },
+        { stage: 'Stage 4: Advanced', desc: 'Deploy ONNX model runtime with quantized INT8 GPU acceleration.' },
+        { stage: 'Stage 5: Career Ready', desc: 'ML System Design interview prep & research paper code implementation.' }
+      ],
+      recommendedProject: {
+        title: 'RAG-Powered Code Search & Diagnostic Engine',
+        problem: 'Build an AI assistant that ingests repository source files and diagnoses syntax bugs in real time.',
+        skillsRequired: ['Python', 'Embeddings', 'Vector DB', 'PyTorch'],
+        difficulty: 'Advanced AI',
+        portfolioValue: '9.8 / 10',
+        linkedTab: 'chat'
+      },
+      nextActions: [
+        { title: '1. Practice Tree Recursion in DSA Lab', desc: 'Close your 20% gap in Data Structures & Graph Traversals.', tab: 'dsa' },
+        { title: '2. Complete AI Companion Practice Quiz', desc: 'Test model fine-tuning and vector prompt concepts.', tab: 'quiz' }
       ]
     },
-    {
-      id: 'q3',
-      question: 'What is your ideal work environment and focus?',
-      options: [
-        { label: 'DevOps & Cloud Site Reliability Engineer (SRE) managing production clusters', score: 'cloud' },
-        { label: 'Robotics, IoT & Embedded Electronics Lab designing hardware prototypes', score: 'embedded' },
-        { label: 'Systems Software Architect building core OS kernel & compiler pipelines', score: 'systems' },
-        { label: 'Quant Software Engineer developing high-frequency algorithmic code', score: 'dsa' }
+    software_dev: {
+      title: 'Full-Stack Software Developer & Systems Architect 💻',
+      salary: '$125,000 – $175,000 / yr',
+      desc: 'Versatile engineering path designing web platforms, REST/GraphQL APIs, microservices, and modern frontend UIs.',
+      overallReadiness: 88,
+      skillsGap: [
+        { name: 'JavaScript / React & State', current: 90, required: 90, gap: 0, action: 'Mastered! Excellent proficiency' },
+        { name: 'Algorithms & Data Structures', current: 85, required: 90, gap: 5, action: 'Practice Bubble/Quick Sort in DSA Lab' },
+        { name: 'SQL & Database Indexing', current: 75, required: 85, gap: 10, action: 'Review DB crash recovery in Cloud Lab' },
+        { name: 'Git & CI/CD Pipelines', current: 80, required: 85, gap: 5, action: 'Complete Git workflow mission' }
+      ],
+      roadmap: [
+        { stage: 'Stage 1: Foundation', desc: 'HTML/CSS, JS ES6+, and responsive UI design principles.' },
+        { stage: 'Stage 2: Core Skills', desc: 'React component architecture, state context, and REST API integration.' },
+        { stage: 'Stage 3: Projects', desc: 'Develop full-stack web application with role-based auth & database.' },
+        { stage: 'Stage 4: Advanced', desc: 'Implement WebSockets for live data sync & automated testing suites.' },
+        { stage: 'Stage 5: Career Ready', desc: 'System design interview practice & portfolio deployment.' }
+      ],
+      recommendedProject: {
+        title: 'Real-Time Interactive Engineering Simulation Hub',
+        problem: 'Create a full-stack platform with interactive virtual breadboards, process Gantt charts, and user analytics.',
+        skillsRequired: ['React 18', 'State Management', 'Tailwind CSS', 'Vite'],
+        difficulty: 'Intermediate / Advanced',
+        portfolioValue: '9.2 / 10',
+        linkedTab: 'digital'
+      },
+      nextActions: [
+        { title: '1. Complete DSA Array Pointer Mission', desc: 'Close remaining 5% gap in algorithm optimization.', tab: 'dsa' },
+        { title: '2. Build Interactive Breadboard UI', desc: 'Enhance your portfolio with circuit simulation code.', tab: 'digital' }
       ]
     }
-  ];
+  };
+
+  const currentRole = targetRolesData[selectedTargetRole] || targetRolesData.cloud_sre;
 
   const osQuizQuestions = [
     {
@@ -80,72 +149,6 @@ export const QuizCareerPanel = () => {
       explanation: 'Waiting Time (WT) is the total time spent in Ready Queue: WT = TAT - BT.'
     }
   ];
-
-  const handleCareerAnswer = (optionScore) => {
-    setCareerAnswers(prev => ({ ...prev, [careerStep]: optionScore }));
-    if (careerStep < careerQuestions.length - 1) {
-      setCareerStep(prev => prev + 1);
-    } else {
-      if (optionScore === 'cloud') {
-        setCareerResult({
-          title: 'Cloud Systems Architect & DevOps SRE Engineer ☁️',
-          matchScore: 96,
-          salary: '$135,000 – $185,000 / yr',
-          desc: 'High demand career focusing on multi-region cloud topology design, Kubernetes container orchestration, NGINX load balancing, and SLA availability optimization.',
-          responsibilities: [
-            'Architect high-availability server clusters handling 50k+ req/sec',
-            'Implement auto-scaling rules based on CPU thresholds',
-            'Manage cloud infrastructure budget caps ($/month)'
-          ],
-          recommendedLab: 'cloud',
-          skillsNeeded: ['Kubernetes', 'Terraform', 'NGINX ALB', 'AWS/GCP Architecture']
-        });
-      } else if (optionScore === 'embedded') {
-        setCareerResult({
-          title: 'Embedded Systems & Firmware Engineer ⚡',
-          matchScore: 94,
-          salary: '$120,000 – $165,000 / yr',
-          desc: 'Specialized hardware engineering role building microcontrollers, IoT devices, digital logic circuits, and 8085/ARM microprocessor assembly firmware.',
-          responsibilities: [
-            'Design and simulate digital breadboard circuits and logic gates',
-            'Program low-level assembly instruction sets for I/O ports',
-            'Develop real-time operating system (RTOS) firmware'
-          ],
-          recommendedLab: 'digital',
-          skillsNeeded: ['C/C++', '8085 Assembly', 'Logic Circuit Design', 'Microcontrollers']
-        });
-      } else if (optionScore === 'systems') {
-        setCareerResult({
-          title: 'Systems Software Developer & Kernel Architect ⚙️',
-          matchScore: 95,
-          salary: '$140,000 – $190,000 / yr',
-          desc: 'Core software engineering role focusing on operating system kernel design, process scheduling algorithms, deadlock prevention, and compiler toolchains.',
-          responsibilities: [
-            'Implement CPU scheduling algorithms (FCFS, SJF, Round Robin)',
-            'Optimize process turnaround time and ready queue latency',
-            'Prevent deadlock conditions and race conditions'
-          ],
-          recommendedLab: 'os',
-          skillsNeeded: ['OS Kernel Programming', 'C/C++', 'Concurrency & Semaphores', 'Linux Internals']
-        });
-      } else {
-        setCareerResult({
-          title: 'Algorithmic Software Engineer & Data Structures Specialist 💻',
-          matchScore: 97,
-          salary: '$145,000 – $200,000 / yr',
-          desc: 'Top-tier engineering path developing high-frequency trading engines, search indexing algorithms, graph traversals, and dynamic programming.',
-          responsibilities: [
-            'Optimize time complexity from O(N^2) to O(N log N)',
-            'Implement tree traversals (BST) and graph BFS algorithms',
-            'Design memory-efficient data structures'
-          ],
-          recommendedLab: 'dsa',
-          skillsNeeded: ['Algorithms & Data Structures', 'C++', 'Graph Theory', 'Time/Space Complexity']
-        });
-      }
-      addXP(100);
-    }
-  };
 
   const handleAnswerQuiz = (optIdx) => {
     setUserSelectedOpt(optIdx);
@@ -166,295 +169,353 @@ export const QuizCareerPanel = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-slate-100">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 panel-container p-6">
+      <div className={`flex flex-wrap items-center justify-between gap-4 p-6 rounded-2xl border transition-all ${
+        gamification ? 'glass-panel border-cyan-500/30' : 'bg-white border-black text-black shadow-md'
+      }`}>
         <div>
           <div className="flex items-center gap-2">
-            <HelpCircle className="w-6 h-6 text-cyan-600" />
-            <h1 className="text-2xl font-extrabold tracking-tight font-['Outfit'] text-slate-900 dark:text-white">
-              {t.quizHeader}
+            <Compass className="w-6 h-6 text-cyan-500" />
+            <h1 className={`text-2xl font-extrabold tracking-tight font-['Outfit'] ${gamification ? 'text-gradient' : 'text-black'}`}>
+              {t.quizHeader} & Evidence-Based Career Readiness
             </h1>
           </div>
-          <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
-            AI career guidance assessment, domain matching, salary insights, and personalized context quizzes.
+          <p className={`text-sm mt-1 font-semibold ${gamification ? 'text-slate-300' : 'text-black'}`}>
+            Personalized target career roadmaps, skill gap analysis, project recommendations, and integrated practice quizzes.
           </p>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/10">
+        {/* Top Tab Switcher */}
+        <div className={`flex p-1 rounded-xl border text-xs ${
+          gamification ? 'bg-slate-900 border-white/10' : 'bg-white border-black text-black'
+        }`}>
           <button
-            onClick={() => setActiveTabState('career')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'career'
+            onClick={() => setActiveTabState('career_readiness')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all ${
+              activeTab === 'career_readiness'
                 ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md'
-                : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                : gamification
+                  ? 'text-slate-300 hover:text-white'
+                  : 'text-black hover:bg-slate-200'
             }`}
           >
             <Compass className="w-4 h-4" />
-            <span>Career Exploration</span>
+            <span>Career Readiness Profile</span>
           </button>
+
           <button
             onClick={() => setActiveTabState('quiz')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all ${
               activeTab === 'quiz'
-                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-md'
+                : gamification
+                  ? 'text-slate-300 hover:text-white'
+                  : 'text-black hover:bg-slate-200'
             }`}
           >
-            <Sparkles className="w-4 h-4" />
-            <span>Personalized Quiz</span>
+            <HelpCircle className="w-4 h-4" />
+            <span>AI Practice Quiz</span>
           </button>
         </div>
       </div>
 
-      {/* Tab 1: Career Guidance Module */}
-      {activeTab === 'career' && (
-        <div className="panel-container p-6 max-w-3xl mx-auto space-y-6">
-          {!careerResult ? (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
-                <span className="text-xs font-extrabold text-cyan-700 dark:text-cyan-400 uppercase tracking-wider">
-                  Career Survey Step {careerStep + 1} of {careerQuestions.length}
+      {/* SECTION 1: CAREER READINESS & INTEGRATED LEARNING */}
+      {activeTab === 'career_readiness' && (
+        <div className="space-y-6">
+          {/* Target Role Selection Bar */}
+          <div className={`p-4 rounded-2xl border space-y-3 ${
+            gamification ? 'glass-panel border-white/10' : 'bg-white border-black text-black shadow-md'
+          }`}>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5 font-mono">
+              <Target className="w-4 h-4 text-cyan-400" /> Select Your Target Engineering Role:
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { id: 'cloud_sre', label: '☁️ Cloud SRE / DevOps Architect' },
+                { id: 'aiml_engineer', label: '🧠 AI / Machine Learning Engineer' },
+                { id: 'software_dev', label: '💻 Full-Stack Software Developer' }
+              ].map(roleItem => (
+                <button
+                  key={roleItem.id}
+                  onClick={() => setSelectedTargetRole(roleItem.id)}
+                  className={`p-3 rounded-xl text-xs font-extrabold transition-all border text-left flex items-center justify-between ${
+                    selectedTargetRole === roleItem.id
+                      ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white border-cyan-400 shadow-lg shadow-cyan-500/20'
+                      : gamification
+                        ? 'bg-slate-900 border-white/10 text-slate-200 hover:border-cyan-500/40'
+                        : 'bg-slate-50 border-black text-black hover:bg-slate-100'
+                  }`}
+                >
+                  <span>{roleItem.label}</span>
+                  {selectedTargetRole === roleItem.id && <Check className="w-4 h-4 text-white" />}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Role Overview Banner */}
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-cyan-950 border border-cyan-500/40 shadow-2xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-cyan-400 block font-mono">
+                  EVIDENCE-BASED CAREER READINESS PROFILE
                 </span>
-                {gamification && (
-                  <span className="badge-gamified">
-                    +100 XP / Assessment
-                  </span>
-                )}
+                <h2 className="text-2xl font-extrabold font-['Outfit'] text-white mt-0.5">
+                  {currentRole.title}
+                </h2>
+                <p className="text-xs text-slate-300 mt-1 max-w-2xl">{currentRole.desc}</p>
               </div>
 
-              <h2 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">
-                {careerQuestions[careerStep].question}
-              </h2>
+              <div className="text-right p-4 rounded-xl bg-slate-900/90 border border-cyan-500/30">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">Skill Roadmap Progress</span>
+                <div className="text-3xl font-extrabold text-cyan-400 font-mono">{currentRole.overallReadiness}%</div>
+                <span className="text-[10px] text-emerald-400 font-bold block mt-0.5">Salary Range: {currentRole.salary}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION B: SKILL GAP ANALYSIS */}
+          <div className={`p-6 rounded-2xl border space-y-4 ${
+            gamification ? 'glass-panel border-white/10' : 'bg-white border-black text-black shadow-md'
+          }`}>
+            <h3 className="font-extrabold text-sm uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-cyan-400" />
+              Skill Gap Analysis & Recommended BRIDGE Missions
+            </h3>
+
+            <div className="space-y-4">
+              {currentRole.skillsGap.map((sk, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-slate-900 border border-white/10 space-y-2">
+                  <div className="flex items-center justify-between font-bold text-xs">
+                    <span className="text-slate-100 font-extrabold">{sk.name}</span>
+                    <div className="flex items-center gap-3 font-mono">
+                      <span className="text-slate-400">Current: {sk.current}%</span>
+                      <span className="text-cyan-400">Required: {sk.required}%</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] ${
+                        sk.gap === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-300'
+                      }`}>
+                        {sk.gap === 0 ? 'Mastered' : `Gap: -${sk.gap}%`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Dual Bar Gauge (Current vs Required) */}
+                  <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden p-0.5 relative">
+                    <div
+                      className="bg-cyan-500 h-full rounded-full transition-all duration-500"
+                      style={{ width: `${sk.current}%` }}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 text-xs">
+                    <span className="text-amber-300 font-semibold flex items-center gap-1">
+                      💡 <strong>Action:</strong> {sk.action}
+                    </span>
+                    <button
+                      onClick={() => setActiveTab('progress')}
+                      className="text-cyan-400 hover:underline font-bold text-[11px]"
+                    >
+                      Open Mission in Passport ➔
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* SECTION C: CAREER ROADMAP & SECTION D: PROJECT RECOMMENDER */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* 5-Stage Step-by-Step Roadmap (7 cols) */}
+            <div className={`lg:col-span-7 p-6 rounded-2xl border space-y-4 ${
+              gamification ? 'glass-panel border-white/10' : 'bg-white border-black text-black shadow-md'
+            }`}>
+              <h3 className="font-extrabold text-sm uppercase tracking-wider text-purple-400 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-purple-400" />
+                5-Stage Step-by-Step Career Roadmap
+              </h3>
 
               <div className="space-y-3">
-                {careerQuestions[careerStep].options.map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleCareerAnswer(opt.score)}
-                    className="w-full text-left p-4 rounded-xl bg-slate-100 dark:bg-slate-900/80 hover:bg-cyan-50 dark:hover:bg-indigo-500/20 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-slate-100 text-sm font-semibold transition-all flex items-center justify-between group shadow-sm"
-                  >
-                    <span>{opt.label}</span>
-                    <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-600 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                {currentRole.roadmap.map((rd, i) => (
+                  <div key={i} className="p-3.5 rounded-xl bg-slate-900 border border-white/10 space-y-1">
+                    <div className="flex items-center justify-between text-xs font-bold text-purple-300">
+                      <span>{rd.stage}</span>
+                      <span className="text-[10px] text-emerald-400">Milestone {i + 1}/5</span>
+                    </div>
+                    <p className="text-xs text-slate-300">{rd.desc}</p>
+                  </div>
                 ))}
               </div>
             </div>
-          ) : (
-            /* Rich Career Recommendation Output */
-            <div className="space-y-6">
-              <div className="text-center space-y-3">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 to-pink-500 mx-auto flex items-center justify-center text-slate-950 shadow-xl shadow-amber-500/30">
-                  <Briefcase className="w-8 h-8" />
+
+            {/* Project Recommender (5 cols) */}
+            <div className={`lg:col-span-5 p-6 rounded-2xl border space-y-4 ${
+              gamification ? 'glass-panel border-white/10' : 'bg-white border-black text-black shadow-md'
+            }`}>
+              <h3 className="font-extrabold text-sm uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-emerald-400" />
+                Recommended Capstone Project
+              </h3>
+
+              <div className="p-4 rounded-xl bg-slate-900 border border-emerald-500/30 space-y-3 text-xs">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-emerald-400 font-mono">Portfolio Highlight</span>
+                  <h4 className="text-base font-extrabold text-white mt-0.5">{currentRole.recommendedProject.title}</h4>
                 </div>
-                
-                <div className="flex items-center justify-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/40 text-xs font-extrabold">
-                    🎯 {careerResult.matchScore}% Match
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-500/40 text-xs font-extrabold flex items-center gap-1">
-                    <DollarSign className="w-3.5 h-3.5" /> {careerResult.salary}
-                  </span>
+
+                <p className="text-slate-300 leading-relaxed">{currentRole.recommendedProject.problem}</p>
+
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">Tech Stack & Tools:</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {currentRole.recommendedProject.skillsRequired.map((sk, idx) => (
+                      <span key={idx} className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-500/30 font-bold">
+                        {sk}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white font-['Outfit']">
-                  {careerResult.title}
-                </h2>
-                <p className="text-sm text-slate-700 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
-                  {careerResult.desc}
-                </p>
-              </div>
-
-              {/* Responsibilities */}
-              <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 space-y-2 text-xs">
-                <span className="font-extrabold text-slate-900 dark:text-slate-100 uppercase block">Key Job Responsibilities:</span>
-                <ul className="space-y-1.5 text-slate-800 dark:text-slate-300 font-medium">
-                  {careerResult.responsibilities.map((resp, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
-                      <span>{resp}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Skills Roadmap */}
-              <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-300 dark:border-white/10 space-y-2">
-                <span className="text-xs font-extrabold text-slate-900 dark:text-slate-100 uppercase">Target Skills Roadmap:</span>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {careerResult.skillsNeeded.map((skill, idx) => (
-                    <span key={idx} className="px-3 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 border border-indigo-300 dark:border-indigo-500/40 text-xs font-mono font-bold text-indigo-900 dark:text-indigo-200">
-                      ✓ {skill}
-                    </span>
-                  ))}
+                <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <span className="text-amber-400 font-bold">Portfolio Value: {currentRole.recommendedProject.portfolioValue}</span>
+                  <button
+                    onClick={() => setActiveTab(currentRole.recommendedProject.linkedTab)}
+                    className="btn-primary text-xs py-1.5 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                  >
+                    <span>Launch Project Module</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-              </div>
-
-              <div className="flex justify-center gap-3">
-                <button
-                  onClick={() => {
-                    setCareerResult(null);
-                    setCareerStep(0);
-                  }}
-                  className="btn-secondary text-xs"
-                >
-                  Retake Survey
-                </button>
-                <button
-                  onClick={() => setActiveTab(careerResult.recommendedLab)}
-                  className="btn-primary text-xs"
-                >
-                  <span>Launch Recommended Lab</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
               </div>
             </div>
-          )}
+          </div>
+
+          {/* SECTION F: "WHAT SHOULD I DO NEXT?" ENGINE */}
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-indigo-950/60 border border-amber-500/50 shadow-2xl space-y-4">
+            <div className="flex items-center gap-2 text-amber-400 font-extrabold text-sm uppercase tracking-wider font-mono">
+              <Sparkles className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
+              "Your Next Best Career Action" Engine
+            </div>
+
+            <p className="text-xs text-slate-200">
+              Based on your skill gap analysis for <strong>{currentRole.title}</strong>, BRIDGE has generated 2 high-priority actions to advance your roadmap:
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {currentRole.nextActions.map((act, i) => (
+                <div key={i} className="p-4 rounded-xl bg-slate-900/90 border border-amber-500/30 space-y-2 flex flex-col justify-between">
+                  <div>
+                    <h4 className="font-extrabold text-sm text-amber-300">{act.title}</h4>
+                    <p className="text-xs text-slate-300 mt-1">{act.desc}</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab(act.tab)}
+                    className="btn-primary text-xs py-2 justify-center bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-black mt-2"
+                  >
+                    <span>Execute Action Now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Tab 2: Personalized Quiz & AI Mistake Analyzer */}
+      {/* SECTION 2: AI PRACTICE QUIZ */}
       {activeTab === 'quiz' && (
-        <div className="panel-container p-6 max-w-3xl mx-auto space-y-6">
+        <div className={`p-6 rounded-2xl border space-y-6 ${
+          gamification ? 'glass-panel border-cyan-500/30' : 'bg-white border-black text-black shadow-md'
+        }`}>
           {!quizStarted ? (
-            <div className="space-y-6">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-indigo-600" />
-                Create Customized Context Assessment
-              </h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">
-                    Select Subject Module
-                  </label>
-                  <select
-                    value={quizTopic}
-                    onChange={(e) => setQuizTopic(e.target.value)}
-                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-slate-200 font-semibold"
-                  >
-                    <option value="os">⚙️ Operating Systems Unit 2 (CPU Scheduling)</option>
-                    <option value="digital">⚡ Digital Electronics & Logic Gates</option>
-                  </select>
-                </div>
-
-                <button
-                  onClick={() => setQuizStarted(true)}
-                  className="w-full btn-primary justify-center py-3"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Start Customized Quiz</span>
-                </button>
+            <div className="text-center py-8 space-y-4 max-w-lg mx-auto">
+              <div className="p-4 rounded-full bg-cyan-500/20 text-cyan-400 w-16 h-16 mx-auto flex items-center justify-center border border-cyan-500/40">
+                <HelpCircle className="w-8 h-8" />
               </div>
+              <h2 className="text-2xl font-extrabold font-['Outfit']">Interactive OS Scheduling Quiz</h2>
+              <p className="text-xs text-slate-300">
+                Test your knowledge on Round Robin quantum calculation, turnaround time, and CPU process queue formulas.
+              </p>
+              <button
+                onClick={() => setQuizStarted(true)}
+                className="btn-primary py-3 px-8 text-sm font-extrabold mx-auto bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow-xl"
+              >
+                <span>Start Quiz Challenge</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
-          ) : !quizFinished ? (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
-                <span className="text-xs font-extrabold text-indigo-700 dark:text-indigo-400 uppercase">
-                  Question {currentQIndex + 1} of {osQuizQuestions.length}
-                </span>
-                <span className="text-xs font-mono font-bold text-cyan-700 dark:text-cyan-400">
-                  Score: {quizScore}
-                </span>
+          ) : quizFinished ? (
+            <div className="text-center py-8 space-y-4 max-w-lg mx-auto">
+              <div className="p-4 rounded-full bg-emerald-500/20 text-emerald-400 w-16 h-16 mx-auto flex items-center justify-center border border-emerald-500/40 animate-bounce">
+                <Trophy className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-extrabold font-['Outfit']">Quiz Completed!</h2>
+              <p className="text-base font-extrabold text-cyan-400 font-mono">
+                Your Score: {quizScore} / {osQuizQuestions.length} ({Math.round((quizScore / osQuizQuestions.length) * 100)}%)
+              </p>
+              <p className="text-xs text-slate-300">
+                +100 XP awarded to your Learning Passport! Your career readiness score for OS Scheduling has been updated.
+              </p>
+              <button
+                onClick={() => {
+                  setQuizStarted(false);
+                  setQuizFinished(false);
+                  setCurrentQIndex(0);
+                  setQuizScore(0);
+                  setUserSelectedOpt(null);
+                }}
+                className="btn-primary py-2.5 px-6 text-xs font-bold mx-auto"
+              >
+                <span>Retake Quiz Challenge</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6 max-w-2xl mx-auto">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-400">
+                <span>Question {currentQIndex + 1} of {osQuizQuestions.length}</span>
+                <span className="text-cyan-400 font-mono">Score: {quizScore}</span>
               </div>
 
-              <h2 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">
-                {osQuizQuestions[currentQIndex].q}
-              </h2>
+              <div className="p-5 rounded-2xl bg-slate-900 border border-white/10 space-y-4">
+                <h3 className="text-base font-extrabold text-slate-100">
+                  {osQuizQuestions[currentQIndex].q}
+                </h3>
 
-              <div className="space-y-3">
-                {osQuizQuestions[currentQIndex].options.map((opt, idx) => {
-                  const isSelected = userSelectedOpt === idx;
-                  const isCorrect = idx === osQuizQuestions[currentQIndex].answer;
-                  
-                  return (
+                <div className="space-y-2">
+                  {osQuizQuestions[currentQIndex].options.map((opt, idx) => (
                     <button
                       key={idx}
-                      disabled={userSelectedOpt !== null}
                       onClick={() => handleAnswerQuiz(idx)}
-                      className={`w-full text-left p-4 rounded-xl border text-sm font-semibold transition-all ${
-                        userSelectedOpt !== null
-                          ? isCorrect
-                            ? 'bg-emerald-100 border-emerald-500 text-emerald-900 dark:bg-emerald-500/20 dark:text-emerald-300 font-bold'
-                            : isSelected
-                              ? 'bg-rose-100 border-rose-500 text-rose-900 dark:bg-rose-500/20 dark:text-rose-300'
-                              : 'bg-slate-100 opacity-50 text-slate-500'
-                          : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-white/5 border-slate-300 dark:border-white/10 text-slate-900 dark:text-slate-200'
+                      disabled={userSelectedOpt !== null}
+                      className={`w-full p-3.5 rounded-xl border text-xs text-left font-bold transition-all ${
+                        userSelectedOpt === idx
+                          ? idx === osQuizQuestions[currentQIndex].answer
+                            ? 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
+                            : 'bg-rose-500/30 border-rose-500 text-rose-300'
+                          : 'bg-slate-950 border-white/10 text-slate-200 hover:border-cyan-500/50'
                       }`}
                     >
                       {opt}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
+
+                {userSelectedOpt !== null && (
+                  <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-xs text-cyan-300 font-semibold space-y-1">
+                    💡 <strong>Explanation:</strong> {osQuizQuestions[currentQIndex].explanation}
+                  </div>
+                )}
               </div>
 
               {userSelectedOpt !== null && (
-                <div className="space-y-4">
-                  <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-cyan-500/30 text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-                    💡 <strong>Explanation:</strong> {osQuizQuestions[currentQIndex].explanation}
-                  </div>
-
-                  <button
-                    onClick={handleNextQuizQuestion}
-                    className="btn-primary w-full justify-center"
-                  >
-                    <span>{currentQIndex < osQuizQuestions.length - 1 ? 'Next Question' : 'Finish & View AI Diagnostic'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                <button
+                  onClick={handleNextQuizQuestion}
+                  className="w-full btn-primary py-3 justify-center text-xs bg-gradient-to-r from-cyan-600 to-indigo-600 text-white"
+                >
+                  <span>{currentQIndex < osQuizQuestions.length - 1 ? 'Next Question ➔' : 'View Quiz Results'}</span>
+                </button>
               )}
-            </div>
-          ) : (
-            <div className="space-y-6 py-2">
-              <div className="text-center space-y-2">
-                <Trophy className="w-12 h-12 text-amber-500 mx-auto animate-bounce" />
-                <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100">Quiz Completed! Score: {quizScore} / {osQuizQuestions.length}</h2>
-              </div>
-
-              {/* AI Diagnostic Error Analysis */}
-              <div className="p-5 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-amber-500/40 space-y-3 text-xs leading-relaxed">
-                <div className="font-extrabold text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4" />
-                  AI Mistake Diagnostic Analysis Report
-                </div>
-
-                <div className="space-y-2 pt-1 border-t border-slate-200 dark:border-white/10 font-medium">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Weak Area:</span>
-                    <span className="font-bold text-rose-700 dark:text-rose-400">Round Robin Scheduling Calculations</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Common Error:</span>
-                    <span className="font-bold text-amber-800 dark:text-amber-300">Incorrect waiting time calculation (WT = TAT - BT)</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600 dark:text-slate-400">Recommendation:</span>
-                    <span className="font-bold text-cyan-700 dark:text-cyan-300">Revise timeline calculation in OS Scheduling Lab</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-center gap-3">
-                <button
-                  onClick={() => {
-                    setQuizStarted(false);
-                    setQuizFinished(false);
-                    setCurrentQIndex(0);
-                    setUserSelectedOpt(null);
-                    setQuizScore(0);
-                  }}
-                  className="btn-secondary text-xs"
-                >
-                  Retake Quiz
-                </button>
-                <button
-                  onClick={() => setActiveTab('os')}
-                  className="btn-primary text-xs"
-                >
-                  Launch OS Scheduling Lab
-                </button>
-              </div>
             </div>
           )}
         </div>
