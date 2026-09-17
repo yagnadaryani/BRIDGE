@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 220 20% 97%;
+  --foreground: 224 23% 16%;
+}
+
+body {
+  background-color: #F6F7FB;
+  color: #202433;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Clean Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0F2F8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C4C9D6;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9299AA;
+}
+
+/* Gamification Mode Theme - Light Foundation with Rich Accents */
+.mode-gamified {
+  --primary-brand: #5B5CE2;
+  --accent-purple: #8B7CF6;
+}
+
+.mode-gamified .card-gamified-glow {
+  box-shadow: 0 6px 24px rgba(91, 92, 226, 0.12);
+  border-color: #C7C8FA;
+}
