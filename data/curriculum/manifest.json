@@ -1,0 +1,32 @@
+{
+  "corpus": "BRIDGE Curriculum Corpus",
+  "institution": "K. K. Wagh Institute of Engineering Education and Research, Nashik",
+  "pattern": "2023",
+  "purpose": "Curriculum scope grounding for Gemini; not a theoretical knowledge base.",
+  "records": [
+    "aids_data_structures_2311203.md",
+    "aids_digital_electronics_2301206.md",
+    "aids_operating_systems_2301202.md",
+    "computer_engineering_data_structures_2301212.md",
+    "computer_engineering_digital_electronics_2301206.md",
+    "computer_engineering_operating_systems_2301202.md",
+    "it_data_structure_algorithm_2308202.md",
+    "it_digital_electronics_2308206.md"
+  ],
+  "metadata_fields": [
+    "institution",
+    "branch",
+    "pattern",
+    "year",
+    "semester",
+    "subject",
+    "course_code",
+    "source_url"
+  ],
+  "boundary": [
+    "Use syllabus records for curriculum scope, units, topics and COs.",
+    "Use Gemini general engineering knowledge for explanations of listed concepts.",
+    "Do not claim theoretical explanations originated from the syllabus.",
+    "Do not invent absent topics, units or course outcomes."
+  ]
+}
