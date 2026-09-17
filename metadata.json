@@ -1,0 +1,6 @@
+{
+  "name": "BRIDGE - Engineering Learning Intelligence Platform",
+  "description": "Personalizing the engineering learning process through continuous diagnosis, root-cause detection, targeted interventions, and interactive engineering labs.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
