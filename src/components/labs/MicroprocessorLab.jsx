@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export const MicroprocessorLab = () => {
-  const { t } = useApp();
+  const { gamification, t } = useApp();
 
   const [activeProgram, setActiveProgram] = useState('led-output');
   const [stepIndex, setStepIndex] = useState(0);

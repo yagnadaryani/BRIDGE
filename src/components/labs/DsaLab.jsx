@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 export const DsaLab = () => {
-  const { t } = useApp();
+  const { gamification, t } = useApp();
 
   const [algo, setAlgo] = useState('bubble');
   const [stepIndex, setStepIndex] = useState(0);

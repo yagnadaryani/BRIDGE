@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const OsLab = () => {
-  const { t } = useApp();
+  const { gamification, t } = useApp();
 
   const [algorithm, setAlgorithm] = useState('RR'); // 'FCFS' | 'SJF' | 'RR' | 'Priority'
   const [quantum, setQuantum] = useState(2);
